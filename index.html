@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Хоря | chaotic builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root{
+--bg1:#0f1226;
+--bg2:#05060f;
+--accent:#7dd3fc;
+--accent2:#a78bfa;
+--glass:rgba(255,255,255,0.06);
+--border:rgba(255,255,255,0.12);
+--text:#e6edf3;
+--muted:#9da7b3;
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Inter,system-ui;
+color:var(--text);
+background:radial-gradient(circle at 20% 20%,#1a1d40,transparent 40%),
+radial-gradient(circle at 80% 0%,#24104a,transparent 40%),
+linear-gradient(180deg,var(--bg1),var(--bg2));
+min-height:100vh;
+display:flex;
+justify-content:center;
+}
+
+.container{
+width:100%;
+max-width:820px;
+padding:60px 24px 80px;
+}
+
+header{
+margin-bottom:40px;
+}
+
+h1{
+font-size:3rem;
+margin:0;
+letter-spacing:-1px;
+}
+
+.nickname{
+background:linear-gradient(90deg,var(--accent),var(--accent2));
+-webkit-background-clip:text;
+color:transparent;
+}
+
+.subtitle{
+margin-top:10px;
+font-family:"JetBrains Mono",monospace;
+color:var(--muted);
+}
+
+.card{
+backdrop-filter:blur(16px);
+background:var(--glass);
+border:1px solid var(--border);
+border-radius:18px;
+padding:26px;
+margin-bottom:24px;
+transition:0.25s;
+}
+
+.card:hover{
+transform:translateY(-4px);
+border-color:rgba(255,255,255,0.25);
+}
+
+h2{
+margin-top:0;
+font-size:1.2rem;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+p{
+color:#cbd5e1;
+line-height:1.65;
+}
+
+.skills{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+margin-top:12px;
+}
+
+.tag{
+font-family:"JetBrains Mono",monospace;
+font-size:0.8rem;
+padding:6px 10px;
+border-radius:8px;
+background:rgba(125,211,252,0.08);
+border:1px solid rgba(125,211,252,0.25);
+}
+
+.links{
+display:flex;
+flex-direction:column;
+gap:12px;
+margin-top:14px;
+}
+
+.btn{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
+padding:14px;
+border-radius:12px;
+text-decoration:none;
+color:white;
+font-weight:600;
+background:rgba(255,255,255,0.06);
+border:1px solid rgba(255,255,255,0.15);
+transition:0.2s;
+}
+
+.btn:hover{
+transform:translateY(-2px);
+background:rgba(255,255,255,0.12);
+}
+
+.btn.primary{
+background:linear-gradient(120deg,var(--accent),var(--accent2));
+color:#0b0d18;
+border:none;
+}
+
+.footer{
+text-align:center;
+margin-top:40px;
+font-family:"JetBrains Mono",monospace;
+font-size:0.85rem;
+color:var(--muted);
+opacity:0.7;
+}
+
+.blob{
+position:fixed;
+width:420px;
+height:420px;
+background:radial-gradient(circle,var(--accent2),transparent 70%);
+filter:blur(120px);
+opacity:0.25;
+top:-120px;
+right:-120px;
+z-index:-1;
+}
+
+.blob2{
+position:fixed;
+width:420px;
+height:420px;
+background:radial-gradient(circle,var(--accent),transparent 70%);
+filter:blur(120px);
+opacity:0.2;
+bottom:-120px;
+left:-120px;
+z-index:-1;
+}
+</style>
+</head>
+
+<body>
+
+<div class="blob"></div>
+<div class="blob2"></div>
+
+<div class="container">
+
+<header>
+<h1>Это <span class="nickname">Хоря</span> 👋</h1>
+<div class="subtitle">chaotic builder • data enjoyer • curiosity driven</div>
+</header>
+
+<div class="card">
+<h2><i class="fa-solid fa-brain"></i> Что здесь вообще происходит</h2>
+<p>
+Я люблю системы. Особенно те, которые сначала выглядят как полный хаос.
+Данные, динамические модели, странные API, проекты которые "вообще-то не должны работать" - всё это довольно быстро превращается у меня в прототип.
+</p>
+<p>
+По складу мышления я скорее исследователь: мне интересно проверять гипотезы, строить странные штуки и смотреть что из этого выживет.
+Иногда это аналитика. Иногда веб‑сервисы. Иногда игровые серверы.
+</p>
+<p>
+Если коротко: я человек, который открывает новую технологию и думает
+"а что будет если соединить это с чем‑нибудь совсем другим?"
+</p>
+</div>
+
+<div class="card">
+<h2><i class="fa-solid fa-layer-group"></i> Инструменты</h2>
+<div class="skills">
+<span class="tag">Python</span>
+<span class="tag">SQL</span>
+<span class="tag">Pandas</span>
+<span class="tag">NumPy</span>
+<span class="tag">React</span>
+<span class="tag">Next.js</span>
+<span class="tag">APIs</span>
+<span class="tag">Docker</span>
+<span class="tag">LLMs</span>
+</div>
+</div>
+
+<div class="card">
+<h2><i class="fa-solid fa-compass"></i> Интересные направления</h2>
+<p>
+• игровые серверные системы и матчмейкинг
+<br>
+• эксперименты с AI‑инструментами
+<br>
+• анализ сложных систем и данных
+<br>
+• небольшие веб‑сервисы которые делают одну вещь, но делают её хорошо
+</p>
+</div>
+
+<div class="card">
+<h2><i class="fa-solid fa-paper-plane"></i> Контакты</h2>
+<div class="links">
+
+<a class="btn primary" href="https://t.me/hrum_horya" target="_blank">
+<i class="fa-brands fa-telegram"></i>
+Telegram
+</a>
+
+<a class="btn" href="https://github.com/eto-horya" target="_blank">
+<i class="fa-brands fa-github"></i>
+GitHub
+</a>
+
+<a class="btn" href="mailto:baranov.i02@yandex.ru">
+<i class="fa-solid fa-envelope"></i>
+Email
+</a>
+
+</div>
+</div>
+
+<div class="footer">
+console.log("built with curiosity, caffeine and questionable ideas");
+<br>
+2026
+</div>
+
+</div>
+
+</body>
+</html>
