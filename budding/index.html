@@ -1,1 +1,408 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система социального взаимодействия «Баддинг»</title>
+    <style>
+        :root {
+            --primary: #00ba7c;
+            --primary-dim: rgba(0, 186, 124, 0.1);
+            --bg: #0d1117;
+            --card-bg: #161b22;
+            --card-border: #30363d;
+            --text: #c9d1d9;
+            --text-muted: #8b949e;
+            --white: #ffffff;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+        }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            padding: 20px;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
+        header {
+            padding: 60px 0 40px;
+            border-bottom: 1px solid var(--card-border);
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-family: var(--font-mono);
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .hero-desc { font-size: 1.2rem; color: var(--text-muted); max-width: 700px; }
+
+        .section {
+            background: var(--card-bg);
+            padding: 35px;
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-family: var(--font-mono);
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+        }
+
+        h2::before { content: ":: "; opacity: 0.5; margin-right: 10px; }
+
+        h3 {
+            font-size: 1.1rem;
+            color: var(--white);
+            margin: 30px 0 15px;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 5px;
+        }
+
+        p { margin-bottom: 15px; }
+
+        /* Role Tabs */
+        .role-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .role-btn {
+            flex: 1;
+            padding: 15px;
+            background: transparent;
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            transition: 0.2s;
+            border-radius: 4px;
+        }
+
+        .role-btn.active {
+            background: var(--primary-dim);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .role-content { display: none; }
+        .role-content.active { display: block; }
+
+        /* Phrase Cards */
+        .phrase-group { margin-bottom: 25px; }
+        .phrase-group-title {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        .phrase-card {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--card-border);
+            padding: 15px 20px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            position: relative;
+            transition: 0.2s;
+        }
+
+        .phrase-card:hover { border-color: var(--primary); }
+
+        /* Lists */
+        ul { list-style: none; margin-bottom: 20px; }
+        li { position: relative; padding-left: 25px; margin-bottom: 12px; }
+        li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+
+        /* Rewards Table */
+        .grid-table {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .grid-row {
+            display: contents;
+        }
+
+        .grid-cell {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .coin-val { color: var(--primary); font-family: var(--font-mono); font-weight: bold; }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .ach-card {
+            border: 1px solid var(--card-border);
+            padding: 20px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .ach-name {
+            display: block;
+            color: var(--primary);
+            font-family: var(--font-mono);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .ach-desc { font-size: 0.9rem; color: var(--text-muted); }
+
+        footer {
+            text-align: center;
+            padding: 80px 0 40px;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            font-family: var(--font-mono);
+            margin-right: 10px;
+            background: var(--card-border);
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.6rem; }
+            .section { padding: 20px; }
+            .achievements-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>БУДДИНГ / BUDDING</h1>
+            <p class="hero-desc">Методическое пособие по системе социального взаимодействия и адаптации студентов.</p>
+        </header>
+
+        <!-- О ПРОГРАММЕ -->
+        <section class="section">
+            <h2>О ПРОГРАММЕ</h2>
+            <p>Программа создана для интеграции студентов, испытывающих трудности с началом общения в коллективе. Основная задача — создать предсказуемую и безопасную среду для первого контакта в местах общего пользования (кухня, зоны отдыха), где барьер входа в разговор наиболее высок.</p>
+            
+            <h3>Роли участников</h3>
+            <p><b>Старший</b> — это волонтер, готовый стать точкой входа в социальную группу. <b>Младший</b> — участник, которому необходима поддержка для преодоления дистанции и включения в общее пространство. Координацию пар осуществляет <b>Медиатор</b>, который распределяет участников и следит за выполнением условий соглашения.</p>
+            
+            <h3>Привычки и этикет</h3>
+            <p>Участники вырабатывают привычку коротких ежедневных встреч. Взаимодействие ограничено временным слотом в 15 минут, что защищает обе стороны от психологической усталости и избыточных ожиданий. Если один из участников занят сложной учебной задачей, он имеет право перенести встречу на другое время без объяснения причин.</p>
+
+            <h3>Рекомендованная схема действий</h3>
+            <p>В начале учебного дня участники договариваются о примерном времени пересечения на кухне или в зоне отдыха. При встрече Младший подходит к Старшему и обозначает начало совместного времени. Старший обеспечивает дружелюбную атмосферу и базовую информационную поддержку. По истечении 15 минут участники могут либо продолжить общение на общих основаниях, либо разойтись по своим задачам, что считается завершением обязательств.</p>
+        </section>
+
+        <!-- ВЫБОР РОЛИ -->
+        <div class="role-selector">
+            <button class="role-btn active" onclick="showRole('junior')">Я — МЛАДШИЙ</button>
+            <button class="role-btn" onclick="showRole('senior')">Я — СТАРШИЙ</button>
+        </div>
+
+        <!-- КОНТЕНТ МЛАДШЕГО -->
+        <div id="junior-content" class="role-content active">
+            <section class="section">
+                <h2>ПАМЯТКА МЛАДШЕМУ</h2>
+                <p>Твоя задача — преодолеть барьер и сделать первый шаг. Помни: Старший уже знает о твоем приходе и подтвердил свою готовность общаться. Тебе не нужно искать повод или «особый момент» — программа уже дала тебе право на этот разговор.</p>
+                
+                <h3>Основные правила</h3>
+                <ul>
+                    <li><b>Твой шаг — решающий:</b> Старший не должен искать тебя по школе. Твоя единственная обязанность — сократить дистанцию и обозначить свое присутствие.</li>
+                    <li><b>Используй Старшего как «якорь»:</b> Тебе не обязательно быть душой компании. Ты можешь просто стоять рядом со Старшим, пока он общается с другими — это уже делает тебя частью сообщества.</li>
+                    <li><b>Честность:</b> Если тебе некомфортно в толпе, ты можешь прямо сказать об этом Старшему. Это снимает лишнее напряжение с обоих.</li>
+                </ul>
+
+                <h3>Шпаргалка: Примеры реплик</h3>
+                
+                <div class="phrase-group">
+                    <div class="phrase-group-title">1. Как начать общение (первый контакт)</div>
+                    <div class="phrase-card">«Привет! Мы в паре по баддингу. Составишь компанию на кухне / на перерыве?»</div>
+                </div>
+
+                <div class="phrase-group">
+                    <div class="phrase-group-title">2. Если Старший уже стоит в компании</div>
+                    <div class="phrase-card">«Привет. Присоединюсь к вам ненадолго? Одному в толпе пока неуютно».</div>
+                </div>
+
+                <div class="phrase-group">
+                    <div class="phrase-group-title">3. Если не знаешь, о чем говорить</div>
+                    <div class="phrase-card">«Слушай, я пока не очень привык к такому количеству людей. Ты долго адаптировался к школе?»</div>
+                    <div class="phrase-card">«Как ты обычно переключаешься, когда код перестает писаться?»</div>
+                    <div class="phrase-card">«Тут всегда так шумно по [дням недели / вечерам] или мне везет?»</div>
+                </div>
+
+                <div class="phrase-group">
+                    <div class="phrase-group-title">4. Если хочешь уйти раньше (завершение)</div>
+                    <div class="phrase-card">«Слушай, я на сегодня свой лимит общения исчерпал. Пойду обратно в кластер. Спасибо, что постоял со мной!»</div>
+                    <div class="phrase-card">«Ладно, не буду тебя отвлекать от ребят/кофе. Увидимся завтра».</div>
+                </div>
+
+                <div class="phrase-group">
+                    <div class="phrase-group-title">5. Если Старший занят и перенес встречу</div>
+                    <div class="phrase-card">«Ок, без проблем. Напиши тогда, как освободишься, или пересечемся уже завтра. Удачи с функцией!»</div>
+                </div>
+
+                <h3>О чем можно спросить Старшего?</h3>
+                <ul>
+                    <li>Давно ты в школе? Какой проект сейчас делаешь?</li>
+                    <li>Сложно было проходить первый бассейн?</li>
+                    <li>Посоветуешь какое-нибудь тихое место в кампусе, когда нужно сосредоточиться?</li>
+                    <li>Как ты борешься с желанием все бросить, когда что-то долго не получается?</li>
+                </ul>
+            </section>
+        </div>
+
+        <!-- КОНТЕНТ СТАРШЕГО -->
+        <div id="senior-content" class="role-content">
+            <section class="section">
+                <h2>ПАМЯТКА СТАРШЕМУ</h2>
+                <p>Твоя задача — быть точкой опоры для Младшего в общей зоне. Тебе не нужно проводить полноценную лекцию или становиться лучшим другом. Достаточно просто быть дружелюбным и соблюдать регламент в 15 минут.</p>
+                
+                <h3>Основные правила</h3>
+                <ul>
+                    <li><b>Будь открытым:</b> Если ты видишь, что твой Младший приближается, не уходи в телефон. Дай понять взглядом или кивком, что ты его заметил.</li>
+                    <li><b>Включай в круг:</b> Если ты стоишь с друзьями, не оставляй Младшего стоять рядом молча. Сделай его частью компании на эти 15 минут.</li>
+                    <li><b>Соблюдай границы:</b> Через 15 минут ты имеешь полное право вежливо закончить разговор и вернуться к своим делам.</li>
+                </ul>
+
+                <h3>Шпаргалка: Примеры реплик</h3>
+
+                <div class="phrase-group">
+                    <div class="phrase-group-title">1. Когда Младший подошел и поздоровался</div>
+                    <div class="phrase-card">«Привет! Рад тебя видеть. Проходи, мы тут как раз [наливаем чай / обсуждаем проект]. Как продвигается твой текущий квест?»</div>
+                </div>
+
+                <div class="phrase-group">
+                    <div class="phrase-group-title">2. Если ты стоишь в компании друзей</div>
+                    <div class="phrase-card">«Ребята, познакомьтесь, это [Имя], мой бадди. [Имя], это мои пиры. Мы сейчас спорим о [тема]. Ты что об этом думаешь?»</div>
+                </div>
+
+                <div class="phrase-group">
+                    <div class="phrase-group-title">3. Если беседа не клеится</div>
+                    <div class="phrase-card">«Слушай, я помню, когда только начинал, мне на этой кухне все казались какими-то супер-гениями. У тебя нет такого ощущения?»</div>
+                    <div class="phrase-card">«Как тебе вообще атмосфера в кластерах сегодня? Не слишком шумно?»</div>
+                </div>
+
+                <div class="phrase-group">
+                    <div class="phrase-group-title">4. Если тебе нужно идти (завершение 15 минут)</div>
+                    <div class="phrase-card">«Слушай, наши 15 минут пролетели. Мне нужно возвращаться в кластер. Был рад пообщаться, до встречи завтра!»</div>
+                    <div class="phrase-card">«Ок, я побежал кодить. Если на кухне будет совсем неуютно — пиши, в следующий раз снова вместе зайдем».</div>
+                </div>
+
+                <div class="phrase-group">
+                    <div class="phrase-group-title">5. Если ты сейчас очень занят (перенос встречи)</div>
+                    <div class="phrase-card">«Привет! Слушай, я сейчас в жестком фокусе, нужно дописать функцию. Давай пересечемся на кухне через час? Я сам тебе маякну».</div>
+                </div>
+
+                <h3>О чем можно спросить Младшего?</h3>
+                <ul>
+                    <li>В какой кластер обычно садишься?</li>
+                    <li>Как планируешь отдыхать после дедлайна?</li>
+                    <li>Слышал что-нибудь о ближайших ивентах в школе?</li>
+                    <li>Удалось сегодня выспаться или «бассейн» продолжается?</li>
+                </ul>
+            </section>
+        </div>
+
+        <!-- РЕГЛАМЕНТ -->
+        <section class="section">
+            <h2>РЕГЛАМЕНТ И ОТВЕТСТВЕННОСТЬ</h2>
+            
+            <h3>1. Цикличность и подбор пары</h3>
+            <ul>
+                <li><b>Срок цикла:</b> Взаимодействие в паре длится 14 дней. По истечении этого срока все формальные обязательства сторон друг перед другом аннулируются.</li>
+                <li><b>Запрос на подбор:</b> Медиатор не подбирает пары автоматически. Участник самостоятельно пишет Медиатору запрос на новый подбор.</li>
+                <li><b>Свободное общение:</b> Если за 2 недели наладили контакт, участники продолжают общаться вне рамок программы.</li>
+            </ul>
+
+            <h3>2. Ответственность сторон</h3>
+            <p><b>Ответственность Старшего:</b> Доступность в общих зонах, этичность (отсутствие давления) и оповещение о занятости заранее.</p>
+            <p><b>Ответственность Младшего:</b> Решимость (ответственность за первый шаг) и уважение к времени Старшего (15 минут).</p>
+            <p><b>Ответственность Медиатора:</b> Конфиденциальность личных причин участия и оперативность подбора (1-2 дня).</p>
+
+            <h3>3. Общие встречи</h3>
+            <p>1–2 раза в неделю организуется оффлайн-встреча всех участников для обмена опытом и интерактива (настолки, квиз, пицца). Цель: создать среду, где Младшие видят других Младших, а Старшие обмениваются приемами.</p>
+
+            <h3>Переход из роли в роль</h3>
+            <p>Когда Младший чувствует готовность стать опорой, он сообщает Медиатору о смене статуса и попадает в базу Старших.</p>
+        </section>
+
+        <!-- НАГРАДЫ -->
+        <section class="section">
+            <h2>СИСТЕМА ВОЗНАГРАЖДЕНИЙ</h2>
+            
+            <div class="grid-table">
+                <div class="grid-row"><div class="grid-cell">Посещение еженедельной общей встречи</div><div class="grid-cell"><span class="coin-val">15 коинов</span></div></div>
+                <div class="grid-row"><div class="grid-cell">Успешное завершение 14-дневного цикла</div><div class="grid-cell"><span class="coin-val">75 коинов</span></div></div>
+                <div class="grid-row"><div class="grid-cell">Бонус Старшему (за посещаемость Младшего)</div><div class="grid-cell"><span class="coin-val">30 коинов</span></div></div>
+                <div class="grid-row"><div class="grid-cell">Переход Младшего в роль Старшего</div><div class="grid-cell"><span class="coin-val">100 коинов</span></div></div>
+            </div>
+
+            <h3>Достижения (Ачивки)</h3>
+            <div class="achievements-grid">
+                <div class="ach-card"><span class="tag">ОБЩАЯ</span><span class="ach-name">«Вне контекста»</span><span class="ach-desc">Совместное посещение мероприятия вне школы (кино, выставка).</span></div>
+                <div class="ach-card"><span class="tag">СТАРШИЙ</span><span class="ach-name">«Ледокол»</span><span class="ach-desc">За первую успешную адаптацию Младшего.</span></div>
+                <div class="ach-card"><span class="tag">МЛАДШИЙ</span><span class="ach-name">«Выход из тени»</span><span class="ach-desc">За первый совершенный шаг (подход к Старшему).</span></div>
+                <div class="ach-card"><span class="tag">СТАРШИЙ</span><span class="ach-name">«Социальный клей»</span><span class="ach-desc">За знакомство Младшего с пятью новыми пирами.</span></div>
+                <div class="ach-card"><span class="tag">МЛАДШИЙ</span><span class="ach-name">«Эволюция»</span><span class="ach-desc">За официальную смену роли с Младшего на Старшего.</span></div>
+            </div>
+
+            <h3 style="margin-top: 40px;">Порядок начисления</h3>
+            <p>Действует принцип <b>самодекларации</b>: в конце цикла участники пишут Медиатору об отсутствии претензий. Медиатор раз в две недели направляет списки Стаффу школы для зачисления наград.</p>
+        </section>
+
+        <footer>
+            <p>СИСТЕМА СОЦИАЛЬНОГО ВЗАИМОДЕЙСТВИЯ // [ETO-HORYA] // 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        function showRole(role) {
+            document.querySelectorAll('.role-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(role + '-content').classList.add('active');
+            event.currentTarget.classList.add('active');
+            
+            // Плавная прокрутка к началу памятки на мобильных
+            if (window.innerWidth < 600) {
+                document.getElementById(role + '-content').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    </script>
+</body>
+</html>
